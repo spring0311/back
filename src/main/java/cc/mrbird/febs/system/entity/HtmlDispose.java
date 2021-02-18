@@ -39,7 +39,7 @@ public class HtmlDispose {
     public String html2png(Car tCar) throws IOException {
         String html = getHtmlStr(tCar);
         //string转为inputstream流
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(html.getBytes());
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(html.getBytes("UTF-8"));
         //模板路径
         File targetFile = ResourceUtils.getFile(imgUrl + "picture.html");
         //inputstream流转为file
@@ -117,11 +117,7 @@ public class HtmlDispose {
                 "        </div>\n" +
                 "        <div style=\"text-align: center\">\n" +
                 "            <div style=\"width: 10px;float: right;font-size: 10px\">\n" +
-                "                <div style=\"height: 30px\"></div>\n" +
-                "                第一联\n" +
-                "                <div style=\"height: 15px\"></div>\n" +
-                "                存根联\n" +
-                "            </div>\n" +
+                "                <div style=\"height: 30px\"></div>第一联<div style=\"height: 15px\"></div>存根联</div>\n" +
                 "            <table style=\"width: 730px;float: left; border-bottom: 0px; border: black;font-size: 12px;border-collapse: collapse\"\n" +
                 "                   class=\"one-t\"\n" +
                 "                   border=\"1px solid black\"\n" +
@@ -192,11 +188,12 @@ public class HtmlDispose {
                 "        </div>\n" +
                 "        <div style=\"text-align: center\">\n" +
                 "            <div style=\"width: 10px;float: right;font-size: 10px\">\n" +
-                "                <div style=\"height: 30px\"></div>\n" +
+                "                <div style=\"height: 30px\"></div>第二联<div style=\"height: 15px\"></div>企业留存</div>\n" +
+               /* "                <div style=\"height: 30px\"></div>\n" +
                 "                第二联\n" +
                 "                <div style=\"height: 15px\"></div>\n" +
                 "                企业留存\n" +
-                "            </div>\n" +
+                "            </div>\n" +*/
                 "            <table style=\"width: 730px;float: left; border-bottom: 1px; border: #216897;font-size: 12px;border-collapse: collapse\"\n" +
                 "                   class=\"two-t\"\n" +
                 "                   border=\"1px solid #216897\"\n" +
@@ -268,11 +265,12 @@ public class HtmlDispose {
                 "        </div>\n" +
                 "        <div style=\"text-align: center\">\n" +
                 "            <div style=\"width: 10px;float: right;font-size: 10px\">\n" +
-                "                <div style=\"height: 30px\"></div>\n" +
+                "                <div style=\"height: 30px\"></div>第三联<div style=\"height: 15px\"></div>主管单位留存</div>\n" +
+             /*   "                <div style=\"height: 30px\"></div>\n" +
                 "                第三联\n" +
                 "                <div style=\"height: 15px\"></div>\n" +
                 "                主管单位留存\n" +
-                "            </div>\n" +
+                "            </div>\n" +*/
                 "            <table style=\"width: 730px;float: left; border-bottom: 1px; border: #A64E00;font-size: 12px;border-collapse: collapse\"\n" +
                 "                   class=\"three-t\"\n" +
                 "                   border=\"1px solid #A64E00\"\n" +

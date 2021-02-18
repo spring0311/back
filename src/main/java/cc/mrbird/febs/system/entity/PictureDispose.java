@@ -35,8 +35,9 @@ public class PictureDispose {
         String desImage = imgUrl + newName;
         //拼接方法
         overlapImage(tiandi, haitu, desImage);
-        File file = new File(tiandi);
-        file.delete();
+        //删除模板
+        /*File file = new File(tiandi);
+        file.delete();*/
     }
 
     private static void overlapImage(String backgroundPath, String frontgroudPath, String outPutPath) {
@@ -46,17 +47,21 @@ public class PictureDispose {
 //            BufferedImage background = ImageIO.read(new File(backgroundPath));
 //            BufferedImage frontgroud = ImageIO.read(new File(frontgroudPath));
             BufferedImage background = resizeImagePng(800, 1130, ImageIO.read(new File(backgroundPath)));
-            BufferedImage frontgroud = resizeImagePng(130, 70, ImageIO.read(new File(frontgroudPath)));
+            /*BufferedImage frontgroud = resizeImagePng(130, 70, ImageIO.read(new File(frontgroudPath)));*/
+            BufferedImage frontgroud = resizeImagePng(173, 93, ImageIO.read(new File(frontgroudPath)));
 
             //在背景图片中添加入需要写入的信息，
             Graphics2D g = background.createGraphics();
-
+            //g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             //设置为透明覆盖
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1.0f));
             //在背景图片上相框
-            g.drawImage(frontgroud, 629, 217, frontgroud.getWidth(), frontgroud.getHeight(), null);
+           /* g.drawImage(frontgroud, 629, 217, frontgroud.getWidth(), frontgroud.getHeight(), null);
             g.drawImage(frontgroud, 629, 580, frontgroud.getWidth(), frontgroud.getHeight(), null);
-            g.drawImage(frontgroud, 629, 937, frontgroud.getWidth(), frontgroud.getHeight(), null);
+            g.drawImage(frontgroud, 629, 937, frontgroud.getWidth(), frontgroud.getHeight(), null);*/
+            g.drawImage(frontgroud, 586, 198, frontgroud.getWidth(), frontgroud.getHeight(), null);
+            g.drawImage(frontgroud, 586, 560, frontgroud.getWidth(), frontgroud.getHeight(), null);
+            g.drawImage(frontgroud, 586, 918, frontgroud.getWidth(), frontgroud.getHeight(), null);
 
             g.dispose();
             //输出图片
