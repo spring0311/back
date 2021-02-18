@@ -52,7 +52,7 @@ public class PictureDispose {
 
             //在背景图片中添加入需要写入的信息，
             Graphics2D g = background.createGraphics();
-            //g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             //设置为透明覆盖
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1.0f));
             //在背景图片上相框

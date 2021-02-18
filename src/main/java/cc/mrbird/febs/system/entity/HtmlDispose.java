@@ -1,12 +1,14 @@
 package cc.mrbird.febs.system.entity;
 
-import com.openhtmltopdf.swing.Java2DRenderer;
+//import com.openhtmltopdf.swing.Java2DRenderer;
+
 import com.openhtmltopdf.util.FSImageWriter;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -45,8 +47,11 @@ public class HtmlDispose {
         //inputstream流转为file
         FileUtils.copyInputStreamToFile(byteArrayInputStream, targetFile);
         //通过openhtmltopdf工具生成图片
+        /* final Java2DRenderer renderer = new Java2DRenderer(targetFile, 800, 1130);*/
         final Java2DRenderer renderer = new Java2DRenderer(targetFile, 800, 1130);
         final BufferedImage img = renderer.getImage();
+        /*Graphics2D newG = (Graphics2D) img.getGraphics();
+        newG.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);*/
         final FSImageWriter imageWriter = new FSImageWriter();
         imageWriter.setWriteCompressionQuality(0.9f);
         String imageName = UUID.randomUUID().toString() + ".png";
