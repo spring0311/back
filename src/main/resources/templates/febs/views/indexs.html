@@ -1,0 +1,220 @@
+<div class="layui-fluid layui-anim febs-anim" id="febs-car" lay-title="首页">
+<div>
+    <div class="layui-card-body febs-table-full">
+        <form class="layui-form layui-table-form" lay-filter="user-table-form">
+            <div class="layui-row">
+                <div class="layui-col-md9">
+                    <div class="layui-form-item">
+
+
+                    </div>
+                </div>
+                <div>
+                <div class="layui-col-md1 layui-col-sm2 layui-col-xs2 table-action-area">
+                    <div class="layui-btn layui-btn-sm layui-btn-primary febs-button-blue-plain table-action" onClick="benzhou()">
+                        <i class="layui-icon">本周</i>
+                    </div>
+
+                </div>
+                <div class="layui-col-md1 layui-col-sm2 layui-col-xs2 table-action-area">
+                    <div class="layui-btn layui-btn-sm layui-btn-primary febs-button-blue-plain table-action"  onClick="benyue()">
+                        <i class="layui-icon">本月</i>
+                    </div>
+
+                </div>
+                <div class="layui-col-md1 layui-col-sm2 layui-col-xs2 table-action-area">
+                    <div class="layui-btn layui-btn-sm layui-btn-primary febs-button-blue-plain table-action"  onClick="bennian()">
+                        <i class="layui-icon">本年</i>
+                    </div>
+
+                </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+   <div class="tabBox">
+       <div class="tab_center" id="dss"><p>待审核</p>
+       <div id="dsh" >0</div></div>
+       <div class="tab_center" id="sstg"><p>审核通过</p>
+           <div id="shtg" >0</div>
+       </div>
+       <div class="tab_center" id="sswtg"><p>审核未通过</p>
+           <div id="shwtg" >0</div>
+       </div>
+
+
+
+    </div>
+</div>
+</div>
+<script >
+    layui.use(['jquery', 'layer'], function(){
+        var $ = layui.$ //重点处
+            ,layer = layui.layer;
+        $.ajax({
+            url: ctx + 'car/countstatus',
+            dataType: '',
+            data: {
+                countValue:"week"
+            },
+            success: function(data){
+                for(var i=0;i<data.data.length;i++){
+                    if(data.data[i].status=="0"){
+                        document.getElementById('dsh').innerHTML=data.data[i].count;
+                    }
+                    if(data.data[i].status=="1"){
+                        document.getElementById('shtg').innerHTML=data.data[i].count;
+                    }
+                    if(data.data[i].status=="2"){
+                        document.getElementById('shwtg').innerHTML=data.data[i].count;
+                    }
+                }
+                if(data.data.length==0){
+                    document.getElementById('dsh').innerHTML=0;
+                    document.getElementById('shtg').innerHTML=0;
+                    document.getElementById('shwtg').innerHTML=0;
+                }
+                //console.log(data.data[0].status)
+            },
+            error: function(){
+
+            }
+        })
+    });
+    function benzhou() {
+        $.ajax({
+            url: ctx + 'car/countstatus',
+            dataType: '',
+            data: {
+                countValue:"week"
+            },
+            success: function(data){
+                for(var i=0;i<data.data.length;i++){
+                    if(data.data[i].status=="0"){
+                        document.getElementById('dsh').innerHTML=data.data[i].count;
+                    }
+                    if(data.data[i].status=="1"){
+                        document.getElementById('shtg').innerHTML=data.data[i].count;
+                    }
+                    if(data.data[i].status=="2"){
+                        document.getElementById('shwtg').innerHTML=data.data[i].count;
+                    }
+                }
+                if(data.data.length==0){
+                    document.getElementById('dsh').innerHTML=0;
+                    document.getElementById('shtg').innerHTML=0;
+                    document.getElementById('shwtg').innerHTML=0;
+                }
+            //console.log(data.data[0].status)
+            },
+
+            error: function(){
+
+            }
+        })
+    }
+    function benyue() {
+        $.ajax({
+            url: ctx + 'car/countstatus',
+            dataType: '',
+            data: {
+                countValue:"month"
+            },
+            success: function(data){
+                for(var i=0;i<data.data.length;i++){
+                    if(data.data[i].status=="0"){
+                        document.getElementById('dsh').innerHTML=data.data[i].count;
+                    }
+                    if(data.data[i].status=="1"){
+                        document.getElementById('shtg').innerHTML=data.data[i].count;
+                    }
+                    if(data.data[i].status=="2"){
+                        document.getElementById('shwtg').innerHTML=data.data[i].count;
+                    }
+                }
+                if(data.data.length==0){
+                    document.getElementById('dsh').innerHTML=0;
+                    document.getElementById('shtg').innerHTML=0;
+                    document.getElementById('shwtg').innerHTML=0;
+                }
+                //console.log(data.data[0].status)
+            },
+            error: function(){
+
+            }
+        })
+    }
+    function bennian() {
+        $.ajax({
+            url: ctx + 'car/countstatus',
+            dataType: '',
+            data: {
+                countValue:"year"
+            },
+            success: function(data){
+                for(var i=0;i<data.data.length;i++){
+                    if(data.data[i].status=="0"){
+                        document.getElementById('dsh').innerHTML=data.data[i].count;
+                    }
+                    if(data.data[i].status=="1"){
+                        document.getElementById('shtg').innerHTML=data.data[i].count;
+                    }
+                    if(data.data[i].status=="2"){
+                        document.getElementById('shwtg').innerHTML=data.data[i].count;
+                    }
+                }
+                //console.log(data.data[0].status)
+            },
+            error: function(){
+
+            }
+        })
+    }
+</script>
+<script src="//libs.baidu.com/jquery/1.9.0/jquery.js" type="text/javascript"></script>
+<style>
+    .tabBox{
+        display: flex;
+        justify-content: space-between;
+           }
+    .tab_center{
+        width: 33.33%;
+        height: 200px;
+        border: 1px solid #000;
+    }
+    #dsh{
+        text-align: center;
+        margin-top:50px;
+    }
+    #shtg{
+        text-align: center;
+        margin-top:50px;
+    }
+    #shwtg{
+        text-align: center;
+        margin-top:50px;
+    }
+    .imgBox{
+        text-align: center;
+    }
+    #dss{
+        color:blue;
+        font-size: 25px;
+        font-weight: 400;//正常
+    }
+    #sstg{
+        color:green;
+        font-size: 25px;
+    font-weight: 400;//正常
+    }
+    #sswtg{
+        color:red;
+        font-size: 25px;
+    font-weight: 400;//正常
+    }
+    .icon{
+        width: 50%;
+        height: 100px;
+    }
+</style>

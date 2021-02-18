@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.mrbird.febs.system.mapper.CarMapper">
+
+    <sql id="findUserDetailSql">
+    SELECT
+    t.carid,
+    t.carno,
+    t.depname,
+    t.framenumber,
+    t.cartype,
+    t.colour,
+    t.status,
+    t.page1,
+    t.page2,
+    t.page3,
+    t.page4,
+    t.templateadress,
+    t.audittime
+    FROM
+    t_car t where 1=1
+        <if test="car.carno != null and car.carno != ''">
+            AND t.carno = #{car.carno}
+        </if>
+        <if test="car.depname != null and car.depname !=''">
+            And t.depname = #{car.depname}
+        </if>
+        <if test="car.carid != null and car.carid !=''">
+            And t.carid = #{car.carId}
+        </if>
+        order  by t.CREATE_TIME  desc
+    </sql>
+
+    <sql id="countUserDetailSql" >
+    SELECT
+    COUNT(1)
+    FROM
+    t_car t
+    WHERE 1 = 1
+    </sql>
+
+    <sql id="statuscountSql" >
+    SELECT
+    COUNT(1)
+    FROM
+    t_car t
+    WHERE 1 = 1 and status=0
+    </sql>
+
+    <sql id="countstatusSql" >
+     select  count(*)count,status from t_car t  where 1=1
+        <if test=" countValue == 'week' ">
+            AND YEARWEEK(date_format(t.CREATE_TIME,'%Y-%m-%d')) = YEARWEEK(now())
+        </if>
+        <if test=" countValue == 'month' ">
+            AND DATE_FORMAT(t.CREATE_TIME, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+        </if>
+        <if test=" countValue == 'year' ">
+            AND YEAR(t.CREATE_TIME)=YEAR(now())
+        </if>
+     group  by status  order by status
+    </sql>
+
+
+    <select id="findUserDetailPage" parameterType="car" resultType="car">
+        <include refid="findUserDetailSql"/>
+    </select>
+
+
+    <select id="countUserDetail" parameterType="car" resultType="long">
+        <include refid="countUserDetailSql"/>
+    </select>
+
+
+    <select id="statuscountdetail"  resultType="long">
+        <include refid="statuscountSql"/>
+    </select>
+
+    <select id="countstatus" parameterType="String"  resultType="java.util.HashMap">
+        <include refid="countstatusSql"/>
+    </select>
+
+
+
+    <update id="updatebohui"  parameterType="String"  >
+        update  t_car set status=2    where carid= #{carId}
+    </update>
+
+
+    <update id="updatetongguo"  parameterType="String"  >
+        update  t_car set status=1   where carid= #{carId}
+    </update>
+</mapper>

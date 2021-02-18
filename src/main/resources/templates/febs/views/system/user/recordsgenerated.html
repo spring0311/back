@@ -1,0 +1,354 @@
+<div class="layui-fluid layui-anim febs-anim" id="febs-car" lay-title="生成记录">
+    <div class="layui-row febs-container">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body febs-table-full">
+                    <form class="layui-form layui-table-form" lay-filter="user-table-form">
+                        <div class="layui-row">
+                            <div class="layui-col-md10">
+                                <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label layui-form-label-sm">车牌号</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" name="carno" autocomplete="off" class="layui-input">
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label layui-form-label-sm">车属单位</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" name="depname" autocomplete="off" class="layui-input">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md2 layui-col-sm12 layui-col-xs12 table-action-area">
+                                <div class="layui-btn layui-btn-sm layui-btn-primary febs-button-blue-plain table-action" id="query">
+                                    <i class="layui-icon">&#xe848;</i>
+                                </div>
+                                <!--<div class="layui-btn layui-btn-sm layui-btn-primary febs-button-green-plain table-action" id="reset">
+                                    <i class="layui-icon">&#xe79b;</i>
+                                </div>-->
+                            </div>
+                        </div>
+                    </form>
+                    <table lay-filter="userTable" lay-data="{id: 'userTable'}"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="user-status">
+    {{#
+    var status = {
+    2: {title: '审批未通过', color: 'volcano'},
+    1: {title: '审批通过', color: 'green'},
+    0: {title: '待审批', color: 'blue'}
+    }[d.status];
+    }}
+    <span class="layui-badge febs-bg-{{status.color}}">{{ status.title }}</span>
+</script>
+<script type="text/html" id="user-sex">
+    {{#
+    var sex = {
+    2: {title: '保密'},
+    1: {title: '女'},
+    0: {title: '男'}
+    }[d.sex];
+    }}
+    <span>{{ sex.title }}</span>
+</script>
+<script type="text/html" id="user-option">
+    <a lay-event="tongguo" ><i class="layui-icon febs-edit-area febs-green">通过</i></a>
+    <a lay-event="bohui" ><i class="layui-icon febs-edit-area febs-volcano">驳回</i></a>
+    <a lay-event="edit" ><i class="layui-icon febs-edit-area febs-blue">修改</i></a>
+</script>
+<script type="text/html" id="xiazai">
+    <a lay-event="xiazai" ><i class="layui-icon febs-edit-area febs-blue">下载</i></a>
+</script>
+<script data-th-inline="none" type="text/javascript">
+    var $ = layui.$ //重点处
+        ,layer = layui.layer;
+    layui.use(['dropdown', 'jquery', 'laydate', 'form', 'table', 'febs', 'treeSelect'], function () {
+        var $ = layui.jquery,
+            laydate = layui.laydate,
+            febs = layui.febs,
+            form = layui.form,
+            table = layui.table,
+            treeSelect = layui.treeSelect,
+            dropdown = layui.dropdown,
+            $view = $('#febs-car'),
+            $query = $view.find('#query'),
+            $reset = $view.find('#reset'),
+            $searchForm = $view.find('form'),
+            sortObject = {field: 'createTime', type: null},
+            tableIns,
+            createTimeFrom,
+            createTimeTo;
+
+        form.render();
+
+        initTable();
+
+        laydate.render({
+            elem: '#user-createTime',
+            range: true,
+            trigger: 'click'
+        });
+
+        dropdown.render({
+            elem: $view.find('.action-more'),
+            click: function (name, elem, event) {
+                var checkStatus = table.checkStatus('userTable');
+                if (name === 'add') {
+                    febs.modal.open('新增用户', 'system/user/add', {
+                        btn: ['提交', '重置'],
+                        area: $(window).width() <= 750 ? '95%' : '50%',
+                        offset: '30px',
+                        yes: function (index, layero) {
+                            $('#user-add').find('#submit').trigger('click');
+                        },
+                        btn2: function () {
+                            $('#user-add').find('#reset').trigger('click');
+                            return false;
+                        }
+                    });
+                }
+                if (name === 'delete') {
+                    if (!checkStatus.data.length) {
+                        febs.alert.warn('请选择需要删除的用户');
+                    } else {
+                        febs.modal.confirm('删除用户', '确定删除该用户？', function () {
+                            var userIds = [];
+                            layui.each(checkStatus.data, function (key, item) {
+                                userIds.push(item.userId)
+                            });
+                            deleteUsers(userIds.join(','));
+                        });
+                    }
+                }
+                if (name === 'reset') {
+                    if (!checkStatus.data.length) {
+                        febs.alert.warn('请选择需要重置密码的用户');
+                    } else {
+                        var usernames = [];
+                        layui.each(checkStatus.data, function (key, item) {
+                            usernames.push(item.username)
+                        });
+                        febs.post(ctx + 'user/password/reset/' + usernames.join(','), null, function () {
+                            febs.alert.success('所选用户密码已重置为1234qwer');
+                        });
+                    }
+                }
+                if (name === 'export') {
+                    var params = $.extend(getQueryParams(), {field: sortObject.field, order: sortObject.type});
+                    params.pageSize = $view.find(".layui-laypage-limits option:selected").val();
+                    params.pageNum = $view.find(".layui-laypage-em").next().html();
+                    febs.download(ctx + 'user/excel', params, '用户信息表.xlsx');
+                }
+            },
+            options: [{
+                name: 'add',
+                title: '新增用户',
+                perms: 'user:add'
+            }, {
+                name: 'delete',
+                title: '删除用户',
+                perms: 'user:delete'
+            }, {
+                name: 'reset',
+                title: '密码重置',
+                perms: 'user:password:reset'
+            }, {
+                name: 'export',
+                title: '导出Excel',
+                perms: 'user:export'
+            }]
+        });
+
+        treeSelect.render({
+            elem: $view.find('#dept'),
+            type: 'get',
+            data: ctx + 'dept/select/tree',
+            placeholder: '请选择',
+            search: false
+        });
+
+        table.on('tool(userTable)', function (obj) {
+            var data = obj.data,
+                layEvent = obj.event;
+            if (layEvent === 'detail') {
+                febs.modal.view('用户信息', 'system/user/detail/' + data.username, {
+                    area: $(window).width() <= 750 ? '95%' : '660px'
+                });
+            }
+            if (layEvent === 'bohui') {
+                febs.modal.confirm('驳回', '确定驳回该数据？', function () {
+                    bohuicar(data.carId,data.status);
+                });
+        }
+            if (layEvent === 'tongguo') {
+                febs.modal.confirm('通过', '确定审批该数据？', function () {
+                    tongguocar(data.carId,data.status);
+                });
+            }
+            if (layEvent === 'xiazai') {
+                var carId=data.carId;
+                    var url =ctx + 'car/downloadPictures/'+ carId;
+                    console.log(data)
+                    $.get(url,function(data) {
+                        var x=new XMLHttpRequest();
+                        x.open("GET",data.templateadress, true);
+                        x.responseType = 'blob';
+                        x.onload=function(e){
+                            var url = window.URL.createObjectURL(x.response)
+                            var a = document.createElement('a');
+                            a.href = url
+                            a.download =data.carno
+                            a.click()
+                        }
+                        x.send();
+                    });
+            }
+
+            if (layEvent === 'edit') {
+                if(data.status==1||data.status==2){
+                    febs.alert.success('已通过和已驳回的数据不可再次修改');
+                    return;
+                }
+                febs.modal.open('修改', 'system/user/carupdate/' + data.carId, {
+                    area: $(window).width() <= 750 ? '90%' : '50%',
+                    offset: '30px',
+                    btn: ['提交', '取消'],
+                    yes: function (index, layero) {
+                        $('#car-update').find('#submit').trigger('click');
+                    },
+                    btn2: function () {
+                        layer.closeAll();
+                    }
+                });
+            }
+        });
+
+        table.on('sort(userTable)', function (obj) {
+            sortObject = obj;
+            tableIns.reload({
+                initSort: obj,
+                where: $.extend(getQueryParams(), {
+                    field: obj.field,
+                    order: obj.type
+                })
+            });
+        });
+
+        $query.on('click', function () {
+            var params = $.extend(getQueryParams(), {field: sortObject.field, order: sortObject.type});
+            tableIns.reload({where: params, page: {curr: 1}});
+        });
+
+        $reset.on('click', function () {
+            $searchForm[0].reset();
+            treeSelect.revokeNode('dept');
+            sortObject.type = 'null';
+            createTimeTo = null;
+            createTimeFrom = null;
+            tableIns.reload({where: getQueryParams(), page: {curr: 1}, initSort: sortObject});
+        });
+        photograph=function(id) {
+            var url =ctx + 'car/list';
+            $.get(url,{carId:id},function(data){
+            layer.open({
+                type: 1,
+                skin: 'layui-layer-rim', //加上边框
+                area: ['80%', '80%'], //宽高
+                shadeClose: true, //开启遮罩关闭
+                end: function (index, layero) {
+                    return false;
+                },
+                content: '<div style="text-align:center"><img src="'+data.data.rows[0].page1+'"  height="250" width="400"  />'
+                   + '<img src="'+data.data.rows[0].page2+'"   height="250" width="400"  /></div>' +
+
+                    '<div style="text-align:center"><img src="'+data.data.rows[0].page3+'"   height="250" width="400"   />'
+                    + '<img src="'+data.data.rows[0].page4+'"   height="250" width="400"  /></div>'
+
+            });
+            })
+        }
+        function initTable() {
+            tableIns = febs.table.init({
+                elem: $view.find('table'),
+                id: 'userTable',
+                url: ctx + 'car/list',
+                cols: [[
+                    {type: 'checkbox'},
+                  {field: 'carno', title: '车牌号', width:100},
+                    {field: 'depname', title: '车属单位', width: 240},
+                    {field: 'framenumber', title: '车架号码', width: 160},
+                    {field: 'cartype', title: '车辆类别', width: 90},
+                    {field: 'audittime', title: '审核时间', width: 90},
+                    {field: 'colour', title: '车辆颜色', width: 90},
+                    {title: '审批状态', templet: '#user-status',width: 110},
+                    {
+                        field: 'ava', title: '上传图片', align: 'center', sort: false, width: 200,
+                        templet: function (d) {
+                            return '<div onclick="photograph('+d.carId+');"    ><img  id="displayImg "   width="20px" height="20px" src=' + d.page1 + '>' +
+                                '' +
+                                '<img   width="20px" height="20px" src=' + d.page2 + '>' +
+                                '<img    width="20px" height="20px" src=' + d.page3 + '>' +
+                                '<img   width="20px" height="20px" src=' + d.page4 + '>' +
+                                '</div>'
+
+
+                        }
+                    },
+                    {title: '操作', toolbar: '#user-option', width: 180},
+                    {title: '入网证明下载',toolbar: '#xiazai', width: 180},
+                    {field: 'carId', style:'display:none;'}
+                ]]
+            });
+        }
+        function getQueryParams() {
+            var params = $searchForm.serializeJson();
+            var createTime = params.time;
+            if (createTime) {
+                createTimeFrom = createTime.split(' - ')[0];
+                createTimeTo = createTime.split(' - ')[1];
+            }
+            params.invalidate_ie_cache = new Date();
+            params.createTimeFrom = createTimeFrom;
+            params.createTimeTo = createTimeTo;
+            return params;
+        }
+
+        function deleteUsers(userIds) {
+            var currentUserId = currentUser.userId + '';
+            if (('' + userIds).split(',').indexOf(currentUserId) !== -1) {
+                febs.alert.warn('所选用户包含当前登录用户，无法删除');
+                return;
+            }
+            febs.get(ctx + 'user/delete/' + userIds, null, function () {
+                febs.alert.success('删除用户成功');
+                $query.click();
+            });
+        }
+        function bohuicar(carId,status) {
+            if(status==1||status==2){
+                febs.alert.success('已通过和已驳回的数据不可再次驳回');
+                return;
+            }
+            febs.get(ctx + 'car/bohui/' + carId, null, function () {
+                febs.alert.success('驳回数据成功');
+                $query.click();
+            });
+        }
+        function tongguocar(carId,status) {
+            if(status==1||status==2){
+                febs.alert.success('已通过和已驳回的数据不可再次审批');
+                return;
+            }
+            febs.get(ctx + 'getImg/' + carId, null, function () {
+                febs.alert.success('审批数据成功');
+                $query.click();
+            });
+        }
+    })
+</script>

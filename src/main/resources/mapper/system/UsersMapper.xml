@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.mrbird.febs.system.mapper.UsersMapper">
+
+    <sql id="findUserDetailSql">
+    SELECT
+    u.weChatname weChatname,
+    u.CREATE_TIME CREATE_TIME
+    FROM
+    t_users u
+    </sql>
+
+    <sql id="countUserDetailSql" >
+    SELECT
+    COUNT(1)
+    FROM
+    t_users u
+    WHERE 1 = 1
+    </sql>
+
+    <select id="findUserDetailPage" parameterType="users" resultType="users">
+        <include refid="findUserDetailSql"/>
+    </select>
+
+
+    <select id="countUserDetail" parameterType="users" resultType="long">
+        <include refid="countUserDetailSql"/>
+    </select>
+</mapper>
