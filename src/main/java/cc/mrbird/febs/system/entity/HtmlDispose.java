@@ -1,6 +1,6 @@
 package cc.mrbird.febs.system.entity;
 
-//import com.openhtmltopdf.swing.Java2DRenderer;
+import com.openhtmltopdf.swing.Java2DRenderer;
 
 import com.openhtmltopdf.util.FSImageWriter;
 import org.apache.commons.io.FileUtils;
@@ -109,7 +109,7 @@ public class HtmlDispose {
                 "    </style>\n" +
                 "</head>\n" +
                 "<body>\n" +
-                "<div style=\"width: 794px;height: 1123px; font-weight: 700 \">\n" +
+                "<div style=\"width: 794px;height: 1123px; font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 微软雅黑, Tahoma, Arial, sans-serif; \">" +
                 "    <div style=\"height: 40px; width: 600px\"></div>\n" +
                 "    <!--第一份-->\n" +
                 "    <div style=\"height: 320px;width: 750px;margin-right: auto;margin-left: auto\">\n" +
