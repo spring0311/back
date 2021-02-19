@@ -178,9 +178,8 @@ public class HtmlDispose {
                 "        <div style=\"float: left\"><img style=\"width: 15px;height: 15px;\"\n" +
                 "                                      src=\"http://shiji.app12345.cn/picture/jiandao.png\"/></div>\n" +
                 "        <div style=\"float: right;width: 777px\">\n" +
-                "            <hr style=\"border : 1px dashed black;\"/>\n" +
-                "        </div>\n" +
-                "    </div>\n" +
+                "            <div style=\"font-size: 10px;width: 50px;float: left\">沿此线裁切</div><hr style=\"border : 1px dashed black;width: 720px;float: right\">\n" +
+                "        </div>" +
                 "    <!--二-->\n" +
                 "    <div style=\"height: 40px; width: 600px\"></div>\n" +
                 "    <div style=\"height: 320px;width: 750px;margin-right: auto;margin-left: auto;color: #216897\">\n" +
@@ -255,8 +254,8 @@ public class HtmlDispose {
                 "        <div style=\"float: left\"><img style=\"width: 15px;height: 15px;\"\n" +
                 "                                      src=\"http://shiji.app12345.cn/picture/jiandao.png\"/></div>\n" +
                 "        <div style=\"float: right;width: 777px\">\n" +
-                "            <hr style=\"border : 1px dashed black;\"/>\n" +
-                "        </div>\n" +
+                "            <div style=\"font-size: 10px;width: 50px;float: left\">沿此线裁切</div><hr style=\"border : 1px dashed black;width: 720px;float: right\">\n" +
+                "        </div>" +
                 "    </div>\n" +
                 "    <!--三-->\n" +
                 "    <div style=\"height: 40px; width: 600px\"></div>\n" +
