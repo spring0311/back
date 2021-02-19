@@ -1,9 +1,11 @@
 package cc.mrbird.febs.system.entity;
 
-import com.openhtmltopdf.swing.Java2DRenderer;
+//import com.openhtmltopdf.swing.Java2DRenderer;
 
+import cc.mrbird.febs.system.controller.CarController;
 import com.openhtmltopdf.util.FSImageWriter;
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
@@ -30,6 +32,9 @@ public class HtmlDispose {
     private String imgUrl;
 
     //AtomicLong atomicLong = new AtomicLong(10000000l);
+
+    @Autowired
+    private CarController carController;
 
     /**
      * 传入车辆信息 返回图片名称
@@ -76,7 +81,8 @@ public class HtmlDispose {
         //平台隶属
         String whereFrom = "平台隶属:南京天朗电子科技有限公司山东分公司<br/>" + getNow();
         //编号 8位数
-        String number = tCar.getCarId().toString();
+        //String number = tCar.getCarId().toString();
+        String number = carController.getNumber();
         String htmlStr = "<!DOCTYPE html>\n" +
                 "<html lang=\"en\">\n" +
                 "<head>\n" +
@@ -109,7 +115,7 @@ public class HtmlDispose {
                 "    </style>\n" +
                 "</head>\n" +
                 "<body>\n" +
-                "<div style=\"width: 794px;height: 1123px; font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 微软雅黑, Tahoma, Arial, sans-serif; \">" +
+                "<div style=\"width: 794px;height: 1123px; font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 微软雅黑, Tahoma, Arial, sans-serif; \">\n" +
                 "    <div style=\"height: 40px; width: 600px\"></div>\n" +
                 "    <!--第一份-->\n" +
                 "    <div style=\"height: 320px;width: 750px;margin-right: auto;margin-left: auto\">\n" +
@@ -177,9 +183,11 @@ public class HtmlDispose {
                 "    <div>\n" +
                 "        <div style=\"float: left\"><img style=\"width: 15px;height: 15px;\"\n" +
                 "                                      src=\"http://shiji.app12345.cn/picture/jiandao.png\"/></div>\n" +
-                "        <div style=\"float: right;width: 777px\">\n" +
-                "            <div style=\"font-size: 10px;width: 50px;float: left\">沿此线裁切</div><hr style=\"border : 1px dashed black;width: 720px;float: right\">\n" +
+                "        <div style=\"float: right;width: 777px;\" >\n" +
+                "            <div style=\"font-size: 8px;width: 42px;line-height: 18px ;text-align: center;float: left\">沿此线切割</div><div style=\"float: right;width: 730px\"><hr style=\"border : 1px dashed black;\"/></div>\n" +
                 "        </div>" +
+                "    </div>\n" +
+                //"            <hr style=\"border : 1px dashed black;\"/>\n" +
                 "    <!--二-->\n" +
                 "    <div style=\"height: 40px; width: 600px\"></div>\n" +
                 "    <div style=\"height: 320px;width: 750px;margin-right: auto;margin-left: auto;color: #216897\">\n" +
@@ -253,8 +261,8 @@ public class HtmlDispose {
                 "    <div>\n" +
                 "        <div style=\"float: left\"><img style=\"width: 15px;height: 15px;\"\n" +
                 "                                      src=\"http://shiji.app12345.cn/picture/jiandao.png\"/></div>\n" +
-                "        <div style=\"float: right;width: 777px\">\n" +
-                "            <div style=\"font-size: 10px;width: 50px;float: left\">沿此线裁切</div><hr style=\"border : 1px dashed black;width: 720px;float: right\">\n" +
+                "        <div style=\"float: right;width: 777px;\" >\n" +
+                "            <div style=\"font-size: 8px;width: 42px;line-height: 18px ;text-align: center;float: left\">沿此线切割</div><div style=\"float: right;width: 730px\"><hr style=\"border : 1px dashed black;\"/></div>\n" +
                 "        </div>" +
                 "    </div>\n" +
                 "    <!--三-->\n" +
