@@ -5,12 +5,19 @@ import cc.mrbird.febs.common.controller.BaseController;
 import cc.mrbird.febs.common.entity.FebsResponse;
 import cc.mrbird.febs.common.entity.QueryRequest;
 import cc.mrbird.febs.common.exception.FebsException;
+import cc.mrbird.febs.monitor.controller.SessionController;
 import cc.mrbird.febs.system.entity.Car;
 import cc.mrbird.febs.system.entity.Status;
+import cc.mrbird.febs.system.entity.TNumber;
+import cc.mrbird.febs.system.mapper.TNumberMapper;
 import cc.mrbird.febs.system.service.ICarService;
+import cc.mrbird.febs.system.service.TNumberService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.IService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +39,12 @@ public class CarController extends BaseController {
 
     private final ICarService carService;
 
+
+    @Autowired
+    private   TNumberService tNumberService;
+
+    @Autowired
+    private TNumberMapper tNumberMapper;
     @GetMapping("list")
     @RequiresPermissions("recordsgenerated:view")
     public FebsResponse userList(Car car, QueryRequest request) {
@@ -80,5 +93,42 @@ public class CarController extends BaseController {
         this.carService.updateCar(car);
         return new FebsResponse().success();
     }
+    /**
+     * 生成规则设备编号:设备类型+五位编号（从1开始，不够前补0）
+     *
+     * @param equipmentType
+     *              设备类型
+     * @param equipmentNo
+     *              最新设备编号
+     * @return
+     */
+    public static String getNewEquipmentNo(String equipmentType, String equipmentNo){
+        String newEquipmentNo = "000001";
 
+        if(equipmentNo != null && !equipmentNo.isEmpty()){
+            int newEquipment = Integer.parseInt(equipmentNo) + 1;
+            newEquipmentNo = String.format(equipmentType + "%06d", newEquipment);
+        }
+
+        return newEquipmentNo;
+    }
+    public String getNumber() {
+        QueryWrapper<TNumber> queryWrapper = new QueryWrapper<>();
+        List<TNumber> tnumberlist =tNumberService.list(queryWrapper);
+        String equipmentNo="";
+        if (tnumberlist.size()<=0){
+            equipmentNo="000001";
+        }else{
+            TNumber tnumber=tNumberService.list(queryWrapper).get(0);
+            equipmentNo =getNewEquipmentNo("", tnumber.getNumber());
+            QueryWrapper<TNumber> queryWrappers = new QueryWrapper<>();
+            queryWrappers.eq("number",tnumber.getNumber());
+            tNumberMapper.delete(queryWrappers);
+        }
+        TNumber tnumbers= new TNumber();
+        tnumbers.setNumber(equipmentNo);
+        tNumberService.save(tnumbers);
+        System.out.println("生成设备编号：" + equipmentNo);
+        return  equipmentNo;
+    }
 }

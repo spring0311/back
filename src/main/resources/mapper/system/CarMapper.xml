@@ -16,14 +16,16 @@
     t.page3,
     t.page4,
     t.templateadress,
-    t.audittime
+    t.audittime,
+    t.czname,
+    t.phone
     FROM
     t_car t where 1=1
         <if test="car.carno != null and car.carno != ''">
-            AND t.carno = #{car.carno}
+            AND    t.carno LIKE CONCAT(CONCAT('%', #{car.carno}),'%')
         </if>
         <if test="car.depname != null and car.depname !=''">
-            And t.depname = #{car.depname}
+            And t.depname like    CONCAT(CONCAT('%', #{car.depname}),'%')
         </if>
         <if test="car.carid != null and car.carid !=''">
             And t.carid = #{car.carId}

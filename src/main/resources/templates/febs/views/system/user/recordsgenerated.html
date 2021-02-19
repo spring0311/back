@@ -1,4 +1,4 @@
-<div class="layui-fluid layui-anim febs-anim" id="febs-car" lay-title="生成记录">
+﻿<div class="layui-fluid layui-anim febs-anim" id="febs-car" lay-title="生成记录">
     <div class="layui-row febs-container">
         <div class="layui-col-md12">
             <div class="layui-card">
@@ -57,7 +57,7 @@
     }}
     <span>{{ sex.title }}</span>
 </script>
-<script type="text/html" id="user-option">
+<script type="text/html" id="car-option">
     <a lay-event="tongguo" ><i class="layui-icon febs-edit-area febs-green">通过</i></a>
     <a lay-event="bohui" ><i class="layui-icon febs-edit-area febs-volcano">驳回</i></a>
     <a lay-event="edit" ><i class="layui-icon febs-edit-area febs-blue">修改</i></a>
@@ -192,17 +192,25 @@
                 });
             }
             if (layEvent === 'xiazai') {
+ if(data.status==0||data.status==2){
+                febs.alert.success('未通过和已驳回的数据不可下载');
+                return;
+            }
                 var carId=data.carId;
                     var url =ctx + 'car/downloadPictures/'+ carId;
                     console.log(data)
-                    $.get(url,function(data) {
+ console.log(data.templateadress)
+
+                    $.get(url,function(msg) {
+
                         var x=new XMLHttpRequest();
+
                         x.open("GET",data.templateadress, true);
                         x.responseType = 'blob';
                         x.onload=function(e){
-                            var url = window.URL.createObjectURL(x.response)
+                            var urls = window.URL.createObjectURL(x.response)
                             var a = document.createElement('a');
-                            a.href = url
+                            a.href = urls
                             a.download =data.carno
                             a.click()
                         }
@@ -282,6 +290,8 @@
                     {type: 'checkbox'},
                   {field: 'carno', title: '车牌号', width:100},
                     {field: 'depname', title: '车属单位', width: 240},
+                    {field: 'czname', title: '联系人', width: 160},
+                    {field: 'phone', title: '手机号', width: 160},
                     {field: 'framenumber', title: '车架号码', width: 160},
                     {field: 'cartype', title: '车辆类别', width: 90},
                     {field: 'audittime', title: '审核时间', width: 90},
@@ -300,7 +310,7 @@
 
                         }
                     },
-                    {title: '操作', toolbar: '#user-option', width: 180},
+                    {title: '操作', toolbar: '#car-option', width: 180},
                     {title: '入网证明下载',toolbar: '#xiazai', width: 180},
                     {field: 'carId', style:'display:none;'}
                 ]]
