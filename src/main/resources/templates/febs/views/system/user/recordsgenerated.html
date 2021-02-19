@@ -264,6 +264,7 @@
         photograph=function(id) {
             var url =ctx + 'car/list';
             $.get(url,{carId:id},function(data){
+
             layer.open({
                 type: 1,
                 skin: 'layui-layer-rim', //加上边框
@@ -272,13 +273,81 @@
                 end: function (index, layero) {
                     return false;
                 },
-                content: '<div style="text-align:center"><img src="'+data.data.rows[0].page1+'"  height="250" width="400"  />'
-                   + '<img src="'+data.data.rows[0].page2+'"   height="250" width="400"  /></div>' +
+                content: '<div style="text-align:center" ><img  onclick="dianji1('+id+');" src="'+data.data.rows[0].page1+'"  height="250" width="400"  />'
+                   + '<img onclick="dianji2('+id+');" src="'+data.data.rows[0].page2+'"   height="250" width="400"  /></div>' +
 
-                    '<div style="text-align:center"><img src="'+data.data.rows[0].page3+'"   height="250" width="400"   />'
-                    + '<img src="'+data.data.rows[0].page4+'"   height="250" width="400"  /></div>'
+                    '<div   onclick="dianji3('+id+');" style="text-align:center"><img src="'+data.data.rows[0].page3+'"   height="250" width="400"   />'
+                    + '<img   onclick="dianji4('+id+');" src="'+data.data.rows[0].page4+'"   height="250" width="400"  /></div>'
 
             });
+            })
+        }
+           dianji1=function(id){
+               var url =ctx + 'car/list';
+               $.get(url,{carId:id},function(data){
+
+                   layer.open({
+                       type: 1,
+                       skin: 'layui-layer-rim', //加上边框
+                       area: ['100%', '100%'], //宽高
+                       shadeClose: true, //开启遮罩关闭
+                       end: function (index, layero) {
+                           return false;
+                       },
+                       content: '<div style="text-align:center" ><img   src="'+data.data.rows[0].page1+'"  height="600" width="960"  /></div>'
+
+                   });
+               })
+        }
+        dianji2=function(id){
+            var url =ctx + 'car/list';
+            $.get(url,{carId:id},function(data){
+
+                layer.open({
+                    type: 1,
+                    skin: 'layui-layer-rim', //加上边框
+                    area: ['100%', '100%'], //宽高
+                    shadeClose: true, //开启遮罩关闭
+                    end: function (index, layero) {
+                        return false;
+                    },
+                    content: '<div style="text-align:center" ><img   src="'+data.data.rows[0].page2+'"  height="600" width="960"  /></div>'
+
+                });
+            })
+        }
+        dianji3=function(id){
+            var url =ctx + 'car/list';
+            $.get(url,{carId:id},function(data){
+
+                layer.open({
+                    type: 1,
+                    skin: 'layui-layer-rim', //加上边框
+                    area: ['100%', '100%'], //宽高
+                    shadeClose: true, //开启遮罩关闭
+                    end: function (index, layero) {
+                        return false;
+                    },
+                    content: '<div style="text-align:center" ><img   src="'+data.data.rows[0].page3+'"  height="600" width="960"  /></div>'
+
+                });
+            })
+        }
+        dianji4=function(id){
+            var url =ctx + 'car/list';
+            $.get(url,{carId:id},function(data){
+
+                layer.open({
+                    type: 1,
+                    skin: 'layui-layer-rim', //加上边框
+                    area: ['100%', '100%'], //宽高
+                    shadeClose: true, //开启遮罩关闭
+                    end: function (index, layero) {
+                        return false;
+                    },
+                    content: '<div style="text-align:center" ><img   src="'+data.data.rows[0].page4+'"  height="600" width="960"  /></div>'
+
+                });
             })
         }
         function initTable() {
