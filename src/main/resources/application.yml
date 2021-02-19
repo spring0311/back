@@ -21,7 +21,7 @@ spring:
     import: classpath:febs.yml
   application:
     name: febs-shiro
-    package-time: "@package-time@"
+    package-time: "2021-02-01T04:20:37Z"
   web:
     resources:
       chain:

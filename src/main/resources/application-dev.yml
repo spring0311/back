@@ -19,7 +19,7 @@
           password: laike123
           driver-class-name: com.mysql.cj.jdbc.Driver
           url: jdbc:mysql://rm-bp1p85c37tx828y1hqo.mysql.rds.aliyuncs.com/tsbd?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2b8
-        # 数据源-2，名称为 quartz
+          # 数据源-2，名称为 quartz
         quartz:
           username: laike
           password: laike123

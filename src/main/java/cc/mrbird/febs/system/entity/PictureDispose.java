@@ -48,7 +48,8 @@ public class PictureDispose {
 //            BufferedImage frontgroud = ImageIO.read(new File(frontgroudPath));
             BufferedImage background = resizeImagePng(800, 1130, ImageIO.read(new File(backgroundPath)));
             /*BufferedImage frontgroud = resizeImagePng(130, 70, ImageIO.read(new File(frontgroudPath)));*/
-            BufferedImage frontgroud = resizeImagePng(173, 93, ImageIO.read(new File(frontgroudPath)));
+            //BufferedImage frontgroud = resizeImagePng(173, 93, ImageIO.read(new File(frontgroudPath)));
+            BufferedImage frontgroud = resizeImagePng(143, 83, ImageIO.read(new File(frontgroudPath)));
 
             //在背景图片中添加入需要写入的信息，
             Graphics2D g = background.createGraphics();
@@ -59,9 +60,12 @@ public class PictureDispose {
            /* g.drawImage(frontgroud, 629, 217, frontgroud.getWidth(), frontgroud.getHeight(), null);
             g.drawImage(frontgroud, 629, 580, frontgroud.getWidth(), frontgroud.getHeight(), null);
             g.drawImage(frontgroud, 629, 937, frontgroud.getWidth(), frontgroud.getHeight(), null);*/
-            g.drawImage(frontgroud, 586, 198, frontgroud.getWidth(), frontgroud.getHeight(), null);
+           /* g.drawImage(frontgroud, 586, 198, frontgroud.getWidth(), frontgroud.getHeight(), null);
             g.drawImage(frontgroud, 586, 560, frontgroud.getWidth(), frontgroud.getHeight(), null);
-            g.drawImage(frontgroud, 586, 918, frontgroud.getWidth(), frontgroud.getHeight(), null);
+            g.drawImage(frontgroud, 586, 918, frontgroud.getWidth(), frontgroud.getHeight(), null);*/
+            g.drawImage(frontgroud, 616, 209, frontgroud.getWidth(), frontgroud.getHeight(), null);
+            g.drawImage(frontgroud, 616, 570, frontgroud.getWidth(), frontgroud.getHeight(), null);
+            g.drawImage(frontgroud, 616, 929, frontgroud.getWidth(), frontgroud.getHeight(), null);
 
             g.dispose();
             //输出图片
